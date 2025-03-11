@@ -1,0 +1,2 @@
+timestamp,event_type,severity,speed,acceleration,braking_force,steering_angle
+2025-03-10 12:00:04,Emergency Braking,Critical,45,-3.2,1.0,-2

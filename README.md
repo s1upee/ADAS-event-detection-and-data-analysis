@@ -3,7 +3,7 @@
 🚗 **Project Status: In Progress** 🚗
 
 ## 📌 Overview
-This project aims to develop a Python-based data processing system for analyzing ADAS event logs, such as lane departure warnings, automatic braking events, and adaptive cruise control activations. The system will read vehicle telemetry data, detect significant ADAS events, and visualize the results for performance evaluation.
+This project aims to develop a Python-based data processing system for analyzing ADAS event logs, such as lane departure warnings, automatic braking events, and adaptive cruise control activations. The system processes vehicle telemetry data, detects ADAS-related events such as sudden braking, lane departures, and emergency braking, and stores them in `adas_events.csv` for further analysis.
 
 ## 📅 Estimated Completion: 1-2 Days
 
@@ -13,6 +13,7 @@ ADAS_Event_Detection/
 │── data/                  # Folder for datasets
 │   ├── adas_data.csv      # Raw ADAS telemetry data
 │   ├── cleaned_adas_data.csv  # Processed dataset
+│   ├── adas_events.csv    # Detected ADAS events
 │
 │── notebooks/             # Jupyter Notebooks (if using Jupyter)
 │   ├── analysis.ipynb     # Notebook for data processing and visualization
@@ -40,17 +41,17 @@ ADAS_Event_Detection/
 
 ## ✅ Progress So Far
 - [x] **Data Processing & Cleaning** (Handling missing values, standardizing data)
-- [ ] **Event Detection & Analysis** (Identifying braking events, lane departures, etc.)
+- [x] **Event Detection & Analysis** (Detected braking events, lane departures, and emergency braking)
 - [ ] **Data Visualization & Reporting** (Graphs, summary reports)
 
 ## 🔜 Next Steps
-- Implement event detection logic
-- Categorize events based on severity
-- Generate visual insights and summary report
+- Visualize ADAS event activations over time
+- Identify trends in braking, lane deviation, and system interventions
+- Generate summary insights and recommendations
 
 🚀 Stay tuned for updates! 🚀
 
 ## 📩 Contact
 If you have any questions, feel free to reach out! 😊  
 🔗 **GitHub**: [s1upee](https://github.com/s1upee)  
-🔗 **Email**: lisakrasiuk@email.com 
+🔗 **Email**: lisakrasiuk@gmail.com
