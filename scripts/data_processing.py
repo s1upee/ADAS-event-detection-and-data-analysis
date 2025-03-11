@@ -1,40 +1,34 @@
 import pandas as pd
 import numpy as np
 import os
+import time
 
-# Define file paths
-import glob
+# Define the data directory
+script_dir = os.path.dirname(os.path.abspath(__file__))
+data_dir = os.path.abspath(os.path.join(script_dir, "../data"))
 
-# Ensure data directory exists
-data_dir = "../data"
+# Ensure the data directory exists
 if not os.path.exists(data_dir):
-    os.makedirs(data_dir)
+    raise FileNotFoundError(f"Error: Data directory '{data_dir}' not found.")
 
-# Find the latest dataset dynamically
-latest_file = max(glob.glob(os.path.join(data_dir, "adas_data_*.csv")), key=os.path.getctime)
+# Wait for the file system to sync
+time.sleep(2)
 
-print(f"✅ Using latest dataset: {latest_file}")
+# Use the symlinked dataset
+dataset_path = os.path.join(data_dir, "adas_data.csv")
 
-# Load the dataset
-try:
-    data = pd.read_csv(latest_file)
-    print("Dataset loaded successfully!")
-except FileNotFoundError:
-    print(f"Error: {latest_file} not found. Please check if the dataset exists.")
-    exit()
+# Ensure the dataset exists
+if not os.path.exists(dataset_path):
+    raise FileNotFoundError(f"Error: Dataset '{dataset_path}' not found. Run generate_synthetic_data.py first.")
 
-output_file = "../data/cleaned_adas_data.csv"
-
-# Ensure data directory exists
-if not os.path.exists("../data"):
-    os.makedirs("../data")
+print(f"✅ Using dataset: {dataset_path}")
 
 # Load the dataset
 try:
-    data = pd.read_csv(latest_file)
+    data = pd.read_csv(dataset_path)
     print("Dataset loaded successfully!")
 except FileNotFoundError:
-    print(f"Error: {input_file} not found. Please place the dataset in the 'data/' folder.")
+    print(f"Error: {dataset_path} not found. Please check if the dataset exists.")
     exit()
 
 # Display basic information
@@ -44,11 +38,11 @@ print("\nInitial Data Sample:\n", data.head())
 data.ffill(inplace=True)  # Forward fill for consistency
 data.dropna(inplace=True)  # Drop any remaining null values
 
-# Converting timestamps to datetime format
+# Convert timestamps to datetime format
 if 'timestamp' in data.columns:
     data['timestamp'] = pd.to_datetime(data['timestamp'])
 
-# Checking for duplicate rows
+# Remove duplicate rows
 data.drop_duplicates(inplace=True)
 
 # Standardizing numeric data
@@ -61,5 +55,6 @@ for col in numeric_cols:
 print("\nCleaned Data Sample:\n", data.head())
 
 # Save the cleaned dataset
+output_file = os.path.join(data_dir, "cleaned_adas_data.csv")
 data.to_csv(output_file, index=False)
-print(f"\nCleaned dataset saved to: {output_file}")
+print(f"\n✅ Cleaned dataset saved to: {output_file}")

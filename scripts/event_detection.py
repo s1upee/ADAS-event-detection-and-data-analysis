@@ -1,21 +1,24 @@
 import pandas as pd
 import os
 
-# Define file paths
-input_file = "../data/cleaned_adas_data.csv"
-output_file = "../data/adas_events.csv"
+import pandas as pd
+import os
 
-# Ensure data directory exists
-if not os.path.exists("../data"):
-    os.makedirs("../data")
+# Define absolute paths
+script_dir = os.path.dirname(os.path.abspath(__file__))
+data_dir = os.path.abspath(os.path.join(script_dir, "../data"))
+input_file = os.path.join(data_dir, "cleaned_adas_data.csv")
+output_file = os.path.join(data_dir, "adas_events.csv")
+
+# Ensure the dataset exists
+if not os.path.exists(input_file):
+    raise FileNotFoundError(f"Error: {input_file} not found. Please run data_processing.py first.")
+
+print(f"✅ Using cleaned dataset: {input_file}")
 
 # Load the cleaned dataset
-try:
-    data = pd.read_csv(input_file)
-    print("Cleaned dataset loaded successfully!")
-except FileNotFoundError:
-    print(f"Error: {input_file} not found. Please run data_processing.py first.")
-    exit()
+data = pd.read_csv(input_file)
+print("Cleaned dataset loaded successfully!")
 
 # Detect ADAS events
 EVENTS = []
@@ -55,7 +58,7 @@ events_df = pd.DataFrame(EVENTS)
 
 # Save to CSV
 events_df.to_csv(output_file, index=False)
-print(f"ADAS events saved to: {output_file}")
+print(f"✅ ADAS events saved to: {output_file}")
 
 # Display sample output
 print("\nDetected Events Sample:")

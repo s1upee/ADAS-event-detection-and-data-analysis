@@ -1,55 +1,61 @@
 # ADAS (Advanced Driver Assistance System) Event Detection and Data Analysis
 
-🚗 **Project Status: In Progress** 🚗
+🚗 **Project Status: Completed** 🚗
 
 ## 📌 Overview
-This project aims to develop a Python-based data processing system for analyzing ADAS event logs, such as lane departure warnings, automatic braking events, and adaptive cruise control activations. The system processes vehicle telemetry data, detects ADAS-related events such as sudden braking, lane departures, and emergency braking, and stores them in `adas_events.csv` for further analysis.
+This project develops a **Python-based data processing system** to analyze ADAS event logs such as **lane departure warnings, emergency braking events, and adaptive cruise control activations**. The system processes real or simulated vehicle telemetry data, detects ADAS-related events, and generates meaningful visualizations.
 
-## 📅 Estimated Completion: 1-2 Days
+## 📅 Project Duration: 2-3 Days
 
 ## 📂 Project Structure
 ```
 ADAS_Event_Detection/
-│── data/                  # Folder for datasets
-│   ├── adas_data.csv      # Raw ADAS telemetry data
-│   ├── cleaned_adas_data.csv  # Processed dataset
-│   ├── adas_events.csv    # Detected ADAS events
-│
-│── notebooks/             # Jupyter Notebooks (if using Jupyter)
-│   ├── analysis.ipynb     # Notebook for data processing and visualization
-│
-│── scripts/               # Python scripts for each task
-│   ├── data_processing.py # Script for data cleaning
-│   ├── event_detection.py # Script for detecting ADAS events
-│   ├── visualization.py   # Script for graphing and reporting
-│
-│── reports/               # Final analysis reports
-│   ├── summary_report.pdf # Key insights and conclusions
-│
-│── visuals/               # Folder for images and graphs
-│   ├── event_trends.png   # Example visualization output
-│
-│── README.md              # Project description and instructions
-│── requirements.txt       # Dependencies (Pandas, NumPy, Matplotlib, etc.)
-│── .gitignore             # Ignore unnecessary files
+│️── data/                  # Folder for datasets
+│️   ├─ adas_data.csv      # Symlink to the latest generated dataset
+│️   ├─ adas_data_YYYYMMDD_HHMMSS.csv  # Raw ADAS telemetry data (with timestamp)
+│️   ├─ cleaned_adas_data.csv  # Preprocessed and standardized dataset
+│️   └─ adas_events.csv    # Detected ADAS events
+│️
+│️── scripts/               # Python scripts for each task
+│️   ├─ generate_synthetic_data.py  # Generates ADAS dataset
+│️   ├─ data_processing.py          # Cleans and processes vehicle data
+│️   ├─ event_detection.py          # Identifies significant ADAS events
+│️   └─ visualization.py            # Generates visual reports
+│️
+│️── visuals/               # Generated graphs and reports
+│️   ├─ event_timeline.png   # ADAS events over time
+│️   ├─ braking_trends.png   # Braking force distribution
+│️   ├─ severity_distribution.png  # Event severity breakdown
+│️   ├─ lane_departure_trends.png  # Lane deviation trends
+│️   ├─ speed_vs_braking.png  # Speed correlation with braking force
+│️   └─ event_heatmap.png  # ADAS event occurrence heatmap
+│️
+│️── README.md              # Project description and instructions
+│️── requirements.txt       # Dependencies (Pandas, NumPy, Matplotlib, etc.)
+│️── .gitignore             # Ignore unnecessary files
 ```
 
 ## 🛠 Technologies Used
-- **Python** (Pandas, NumPy, Matplotlib, Plotly)
+- **Python** (Pandas, NumPy, Matplotlib, Seaborn)
 - **Jupyter Notebook / VS Code** for scripting and visualization
 - **CSV** datasets for vehicle telemetry & ADAS logs
 
-## ✅ Progress So Far
-- [x] **Data Processing & Cleaning** (Handling missing values, standardizing data)
-- [x] **Event Detection & Analysis** (Detected braking events, lane departures, and emergency braking)
-- [ ] **Data Visualization & Reporting** (Graphs, summary reports)
+## ✅ **Project Progress**
+- ✅ **Data Processing & Cleaning** (Handled missing values, standardized data)
+- ✅ **Event Detection & Analysis** (Detected braking events, lane departures, and emergency braking)
+- ✅ **Data Visualization & Reporting** (Graphs, summary insights, and event severity tracking)
+
+## 📊 **Key Insights**
+- Emergency braking events are most frequent during **sudden speed drops**.
+- Lane departures show a correlation with **high-speed sharp turns**.
+- Braking force peaks correlate with **high-speed interventions** by ADAS.
 
 ## 🔜 Next Steps
-- Visualize ADAS event activations over time
-- Identify trends in braking, lane deviation, and system interventions
-- Generate summary insights and recommendations
+- Further refine ADAS event classification based on real-world datasets.
+- Apply machine learning techniques to predict potential **ADAS interventions**.
+- Improve visualization clarity for event severity analysis.
 
-🚀 Stay tuned for updates! 🚀
+🚀 **Project Completed! Ready for Review & Deployment!** 🚀
 
 ## 📩 Contact
 If you have any questions, feel free to reach out! 😊  
