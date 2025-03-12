@@ -1,63 +1,102 @@
-# ADAS (Advanced Driver Assistance System) Event Detection and Data Analysis
+# 🚗 ADAS Event Detection and Data Analysis
 
-🚗 **Project Status: Completed** 🚗
+## Overview
+This project focuses on Advanced Driver Assistance Systems (ADAS) event detection and data analysis using Python. The workflow includes:
 
-## 📌 Overview
-This project develops a **Python-based data processing system** to analyze ADAS event logs such as **lane departure warnings, emergency braking events, and adaptive cruise control activations**. The system processes real or simulated vehicle telemetry data, detects ADAS-related events, and generates meaningful visualizations.
-
-## 📅 Project Duration: 2-3 Days
+- **Synthetic Data Generation**: Creates a dataset with realistic vehicle telemetry.
+- **Data Processing**: Cleans and formats raw ADAS data.
+- **Event Detection**: Identifies driving events such as lane departures, harsh braking, and tailgating risks.
+- **Advanced Event Classification**: Enhances event detection by categorizing risks more accurately.
+- **Data Visualization**: Generates insightful charts to analyze driving trends.
+- **Interactive Dashboard**: Provides a real-time interface to explore ADAS events using Streamlit.
 
 ## 📂 Project Structure
 ```
-ADAS_Event_Detection/
-│️── data/                  # Folder for datasets
-│️   ├─ adas_data.csv      # Symlink to the latest generated dataset
-│️   ├─ adas_data_YYYYMMDD_HHMMSS.csv  # Raw ADAS telemetry data (with timestamp)
-│️   ├─ cleaned_adas_data.csv  # Preprocessed and standardized dataset
-│️   └─ adas_events.csv    # Detected ADAS events
-│️
-│️── scripts/               # Python scripts for each task
-│️   ├─ generate_synthetic_data.py  # Generates ADAS dataset
-│️   ├─ data_processing.py          # Cleans and processes vehicle data
-│️   ├─ event_detection.py          # Identifies significant ADAS events
-│️   └─ visualization.py            # Generates visual reports
-│️
-│️── visuals/               # Generated graphs and reports
-│️   ├─ event_timeline.png   # ADAS events over time
-│️   ├─ braking_trends.png   # Braking force distribution
-│️   ├─ severity_distribution.png  # Event severity breakdown
-│️   ├─ lane_departure_trends.png  # Lane deviation trends
-│️   ├─ speed_vs_braking.png  # Speed correlation with braking force
-│️   └─ event_heatmap.png  # ADAS event occurrence heatmap
-│️
-│️── README.md              # Project description and instructions
-│️── requirements.txt       # Dependencies (Pandas, NumPy, Matplotlib, etc.)
-│️── .gitignore             # Ignore unnecessary files
+📦 test3
+ ┣ 📂 data
+ ┃ ┣ 📜 adas_data.csv
+ ┃ ┣ 📜 cleaned_adas_data.csv
+ ┃ ┣ 📜 adas_events.csv
+ ┣ 📂 notebooks
+ ┣ 📂 reports
+ ┣ 📂 scripts
+ ┃ ┣ 📜 generate_synthetic_data.py
+ ┃ ┣ 📜 data_processing.py
+ ┃ ┣ 📜 event_detection.py
+ ┃ ┣ 📜 visualization.py
+ ┃ ┣ 📜 dashboard.py
+ ┣ 📂 visuals
+ ┃ ┣ 📜 braking_trends.png
+ ┃ ┣ 📜 event_heatmap.png
+ ┃ ┣ 📜 event_timeline.png
+ ┃ ┣ 📜 lane_departure_trends.png
+ ┃ ┣ 📜 severity_distribution.png
+ ┃ ┣ 📜 severity_over_time.png
+ ┃ ┣ 📜 speed_vs_braking.png
+ ┣ 📜 README.md
 ```
 
-## 🛠 Technologies Used
-- **Python** (Pandas, NumPy, Matplotlib, Seaborn)
-- **Jupyter Notebook / VS Code** for scripting and visualization
-- **CSV** datasets for vehicle telemetry & ADAS logs
+## 🚀 Setup and Usage
+### 1️⃣ Install Dependencies
+Ensure you have Python installed, then install required packages:
+```bash
+pip install -r requirements.txt
+```
 
-## ✅ **Project Progress**
-- ✅ **Data Processing & Cleaning** (Handled missing values, standardized data)
-- ✅ **Event Detection & Analysis** (Detected braking events, lane departures, and emergency braking)
-- ✅ **Data Visualization & Reporting** (Graphs, summary insights, and event severity tracking)
+### 2️⃣ Generate Synthetic Data
+Run the script to create a realistic ADAS dataset:
+```bash
+python scripts/generate_synthetic_data.py
+```
 
-## 📊 **Key Insights**
-- Emergency braking events are most frequent during **sudden speed drops**.
-- Lane departures show a correlation with **high-speed sharp turns**.
-- Braking force peaks correlate with **high-speed interventions** by ADAS.
+### 3️⃣ Process Data
+Clean and preprocess the generated dataset:
+```bash
+python scripts/data_processing.py
+```
 
-## 🔜 Next Steps
-- Further refine ADAS event classification based on real-world datasets.
-- Apply machine learning techniques to predict potential **ADAS interventions**.
-- Improve visualization clarity for event severity analysis.
+### 4️⃣ Detect ADAS Events
+Analyze the processed data and detect key ADAS events:
+```bash
+python scripts/event_detection.py
+```
 
-🚀 **Project Completed! Ready for Review & Deployment!** 🚀
+### 5️⃣ Visualize Data
+Generate graphical insights based on detected events:
+```bash
+python scripts/visualization.py
+```
 
+### 6️⃣ Launch Interactive Dashboard
+Explore ADAS events interactively using Streamlit:
+```bash
+streamlit run scripts/dashboard.py
+```
+
+## 📊 Advanced Event Classification
+Recent updates have enhanced the accuracy of event detection by incorporating:
+- **Tailgating Detection**: Identifies vehicles driving too close.
+- **Harsh Acceleration Detection**: Flags rapid speed increases.
+- **Severe Lane Departure Detection**: Detects dangerous steering angles.
+- **Sudden Braking Events**: Differentiates between normal and emergency braking.
+
+## 📈 Data Visualizations
+The system generates various insightful charts, including:
+- **Braking Trends**: Tracks braking intensity over time.
+- **Severity Over Time**: Highlights the frequency of severe driving events.
+- **Event Heatmap**: Shows when ADAS events occur most frequently.
+- **Lane Departure Trends**: Detects patterns in unsafe lane changes.
+- **Speed vs. Braking**: Analyzes speed correlation with emergency braking.
+
+## 🛠️ Future Improvements
+- Enhance dashboard interactivity with filtering and real-time updates.
+- Expand dataset with more driving scenarios.
+- Integrate machine learning for predictive analytics.
+
+---
 ## 📩 Contact
-If you have any questions, feel free to reach out! 😊  
-🔗 **GitHub**: [s1upee](https://github.com/s1upee)  
-🔗 **Email**: lisakrasiuk@gmail.com
+ If you have any questions, feel free to reach out! 😊  
+ 🔗 **GitHub**: [s1upee](https://github.com/s1upee)  
+ 🔗 **Email**: lisakrasiuk@gmail.com
+
+🎯 **Status:** Ongoing Development 🚀
