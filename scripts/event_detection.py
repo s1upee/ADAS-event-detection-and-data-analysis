@@ -1,9 +1,6 @@
 import pandas as pd
 import os
 
-import pandas as pd
-import os
-
 # Define absolute paths
 script_dir = os.path.dirname(os.path.abspath(__file__))
 data_dir = os.path.abspath(os.path.join(script_dir, "../data"))
@@ -23,25 +20,47 @@ print("Cleaned dataset loaded successfully!")
 # Detect ADAS events
 EVENTS = []
 
+# Track last 10 speeds for Cruise Control detection
+speed_history = []
+
 for i, row in data.iterrows():
     event_type = None
     severity = None
     
-    # Sudden braking event
+    # Sudden Braking
     if row.get("acceleration", 0) < -3:
         event_type = "Sudden Braking"
         severity = "Critical" if row["acceleration"] < -5 else "Moderate"
     
-    # Lane departure warning (steering angle change > 10 degrees within one frame)
+    # Lane Departure
     if abs(row.get("steering_angle", 0)) > 10:
         event_type = "Lane Departure"
         severity = "Critical" if abs(row["steering_angle"]) > 20 else "Moderate"
     
-    # ADAS intervention detection (e.g., emergency braking)
+    # Emergency Braking
     if row.get("braking_force", 0) > 0.8:
         event_type = "Emergency Braking"
         severity = "Critical"
     
+    # Harsh Acceleration
+    if row.get("acceleration", 0) > 3:
+        event_type = "Harsh Acceleration"
+        severity = "Critical" if row["acceleration"] > 5 else "Moderate"
+    
+    # Cruise Control Detection (Check if speed is stable for 10+ seconds)
+    speed_history.append(row.get("speed", 0))
+    if len(speed_history) > 10:
+        speed_history.pop(0)
+        if max(speed_history) - min(speed_history) <= 2:
+            event_type = "Cruise Control Active"
+            severity = "None"
+
+    # Tailgating Detection
+    if row.get("speed", 0) > 80 and row.get("braking_force", 0) > 0.5:
+        event_type = "Tailgating Risk"
+        severity = "Moderate"
+
+    # Save detected event
     if event_type:
         EVENTS.append({
             "timestamp": row["timestamp"],
