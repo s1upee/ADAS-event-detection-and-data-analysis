@@ -12,7 +12,7 @@ This project focuses on Advanced Driver Assistance Systems (ADAS) event detectio
 
 ## 📂 Project Structure
 ```
-📦 test3
+📦 ADAS Event Detection and Data Analysis
  ┣ 📂 data
  ┃ ┣ 📜 adas_data.csv
  ┃ ┣ 📜 cleaned_adas_data.csv

@@ -1,60 +1,58 @@
 import pandas as pd
 import numpy as np
 import os
-import time
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
-# Define the data directory
-script_dir = os.path.dirname(os.path.abspath(__file__))
-data_dir = os.path.abspath(os.path.join(script_dir, "../data"))
+# Load latest dataset
+data_dir = "data"
+input_file = os.path.join(data_dir, "ml_ready_adas_data.csv")
+output_train = os.path.join(data_dir, "train.csv")
+output_test = os.path.join(data_dir, "test.csv")
 
-# Ensure the data directory exists
-if not os.path.exists(data_dir):
-    raise FileNotFoundError(f"Error: Data directory '{data_dir}' not found.")
+if not os.path.exists(input_file):
+    raise FileNotFoundError(f"Error: {input_file} not found. Run generate_synthetic_data.py first.")
 
-# Wait for the file system to sync
-time.sleep(2)
+print(f"✅ Using dataset: {input_file}")
 
-# Use the symlinked dataset
-dataset_path = os.path.join(data_dir, "adas_data.csv")
+# Load dataset
+data = pd.read_csv(input_file)
+data["timestamp"] = pd.to_datetime(data["timestamp"])
 
-# Ensure the dataset exists
-if not os.path.exists(dataset_path):
-    raise FileNotFoundError(f"Error: Dataset '{dataset_path}' not found. Run generate_synthetic_data.py first.")
+# 🔥 Select Features and Target Variable
+feature_columns = [
+    "speed", "gps_speed", "acceleration", "yaw_rate",
+    "distance_to_vehicle", "braking_force", "steering_angle",
+    "acceleration_var", "steering_smoothness", "speed_fluctuation",
+    "braking_before_event"
+]
+target_column = "event_type"  # Predicting ADAS events
 
-print(f"✅ Using dataset: {dataset_path}")
+# Drop rows where event_type is missing
+data = data.dropna(subset=[target_column])
 
-# Load the dataset
-try:
-    data = pd.read_csv(dataset_path)
-    print("Dataset loaded successfully!")
-except FileNotFoundError:
-    print(f"Error: {dataset_path} not found. Please check if the dataset exists.")
-    exit()
+# Convert categorical variables (road_type, weather) into dummy variables
+data = pd.get_dummies(data, columns=["road_type", "weather"], drop_first=True)
 
-# Display basic information
-print("\nInitial Data Sample:\n", data.head())
+# 🔹 Apply MinMaxScaler (0 to 1) for most features
+minmax_features = ["speed", "gps_speed", "acceleration", "distance_to_vehicle",
+                   "braking_force", "acceleration_var", "steering_smoothness",
+                   "speed_fluctuation", "braking_before_event"]
 
-# Handling missing values
-data.ffill(inplace=True)  # Forward fill for consistency
-data.dropna(inplace=True)  # Drop any remaining null values
+scaler_minmax = MinMaxScaler()
+data[minmax_features] = scaler_minmax.fit_transform(data[minmax_features])
 
-# Convert timestamps to datetime format
-if 'timestamp' in data.columns:
-    data['timestamp'] = pd.to_datetime(data['timestamp'])
+# 🔹 Apply StandardScaler (Z-score) for yaw_rate & steering_angle
+std_features = ["yaw_rate", "steering_angle"]
+scaler_std = StandardScaler()
+data[std_features] = scaler_std.fit_transform(data[std_features])
 
-# Remove duplicate rows
-data.drop_duplicates(inplace=True)
+# 🔹 Split Data (80% Train, 20% Test)
+train_data, test_data = train_test_split(data, test_size=0.2, random_state=42, stratify=data[target_column])
 
-# Standardizing numeric data
-numeric_cols = ['speed', 'acceleration', 'braking_force', 'steering_angle']
-for col in numeric_cols:
-    if col in data.columns:
-        data[col] = pd.to_numeric(data[col], errors='coerce')
+# Save processed datasets
+train_data.to_csv(output_train, index=False)
+test_data.to_csv(output_test, index=False)
 
-# Output cleaned data sample
-print("\nCleaned Data Sample:\n", data.head())
-
-# Save the cleaned dataset
-output_file = os.path.join(data_dir, "cleaned_adas_data.csv")
-data.to_csv(output_file, index=False)
-print(f"\n✅ Cleaned dataset saved to: {output_file}")
+print(f"✅ Training set saved: {output_train}")
+print(f"✅ Test set saved: {output_test}")
