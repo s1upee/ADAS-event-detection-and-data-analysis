@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime
 
 # Define dataset size
-num_samples = 1000
+num_samples = 5000
 
 # Generate timestamps
 timestamps = pd.date_range(start="2025-03-11 08:00:00", periods=num_samples, freq='s')

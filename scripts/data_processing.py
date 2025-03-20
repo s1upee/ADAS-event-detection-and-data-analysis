@@ -3,6 +3,7 @@ import numpy as np
 import os
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from imblearn.over_sampling import RandomOverSampler, SMOTE
 
 # Load latest dataset
 data_dir = "data"
@@ -50,9 +51,25 @@ data[std_features] = scaler_std.fit_transform(data[std_features])
 # 🔹 Split Data (80% Train, 20% Test)
 train_data, test_data = train_test_split(data, test_size=0.2, random_state=42, stratify=data[target_column])
 
-# Save processed datasets
-train_data.to_csv(output_train, index=False)
-test_data.to_csv(output_test, index=False)
+# ✅ Extract Features and Target for Train Set
+X_train = train_data[feature_columns]  # Keep only feature columns
+y_train = train_data[target_column]    # Keep only target column
+
+# ✅ Apply SMOTE to balance classes in the training set
+smote = SMOTE(random_state=42)
+X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
+
+# ✅ Apply Random Oversampling (if needed)
+ros = RandomOverSampler(random_state=42)
+X_train_resampled, y_train_resampled = ros.fit_resample(X_train_resampled, y_train_resampled)
+
+# ✅ Reconstruct the Train DataFrame after Oversampling
+train_data_resampled = pd.DataFrame(X_train_resampled, columns=feature_columns)
+train_data_resampled[target_column] = y_train_resampled  # Add back the target column
+
+# ✅ Save processed datasets
+train_data_resampled.to_csv(output_train, index=False)  # Oversampled train set
+test_data.to_csv(output_test, index=False)  # Original test set
 
 print(f"✅ Training set saved: {output_train}")
 print(f"✅ Test set saved: {output_test}")
