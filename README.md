@@ -4,9 +4,10 @@
 This project focuses on Advanced Driver Assistance Systems (ADAS) event detection and data analysis using Python. The workflow includes:
 
 - **Synthetic Data Generation**: Creates a dataset with realistic vehicle telemetry.
-- **Data Processing**: Cleans and formats raw ADAS data.
+- **Data Processing**: Cleans and formats raw ADAS data, applies feature scaling, and balances classes using SMOTE.
 - **Event Detection**: Identifies driving events such as lane departures, harsh braking, and tailgating risks.
 - **Advanced Event Classification**: Enhances event detection by categorizing risks more accurately.
+- **Machine Learning Models**: Implements XGBoost, Random Forest, and LightGBM for event classification.
 - **Data Visualization**: Generates insightful charts to analyze driving trends.
 - **Interactive Dashboard**: Provides a real-time interface to explore ADAS events using Streamlit.
 
@@ -14,14 +15,15 @@ This project focuses on Advanced Driver Assistance Systems (ADAS) event detectio
 ```
 📦 ADAS Event Detection and Data Analysis
  ┣ 📂 data
- ┃ ┣ 📜 adas_data.csv
- ┃ ┣ 📜 cleaned_adas_data.csv
- ┃ ┣ 📜 adas_events.csv
+ ┃ ┣ 📜 ml_ready_adas_data.csv
+ ┃ ┣ 📜 train.csv
+ ┃ ┣ 📜 test.csv
  ┣ 📂 notebooks
  ┣ 📂 reports
  ┣ 📂 scripts
  ┃ ┣ 📜 generate_synthetic_data.py
  ┃ ┣ 📜 data_processing.py
+ ┃ ┣ 📜 train_model.py
  ┃ ┣ 📜 event_detection.py
  ┃ ┣ 📜 visualization.py
  ┃ ┣ 📜 dashboard.py
@@ -50,35 +52,41 @@ python scripts/generate_synthetic_data.py
 ```
 
 ### 3️⃣ Process Data
-Clean and preprocess the generated dataset:
+Clean and preprocess the generated dataset, including feature scaling and class balancing:
 ```bash
 python scripts/data_processing.py
 ```
 
-### 4️⃣ Detect ADAS Events
+### 4️⃣ Train Machine Learning Models
+Train and evaluate the ADAS event classification models (XGBoost, Random Forest, and LightGBM):
+```bash
+python scripts/train_model.py
+```
+
+### 5️⃣ Detect ADAS Events
 Analyze the processed data and detect key ADAS events:
 ```bash
 python scripts/event_detection.py
 ```
 
-### 5️⃣ Visualize Data
+### 6️⃣ Visualize Data
 Generate graphical insights based on detected events:
 ```bash
 python scripts/visualization.py
 ```
 
-### 6️⃣ Launch Interactive Dashboard
+### 7️⃣ Launch Interactive Dashboard
 Explore ADAS events interactively using Streamlit:
 ```bash
 streamlit run scripts/dashboard.py
 ```
 
-## 📊 Advanced Event Classification
-Recent updates have enhanced the accuracy of event detection by incorporating:
-- **Tailgating Detection**: Identifies vehicles driving too close.
-- **Harsh Acceleration Detection**: Flags rapid speed increases.
-- **Severe Lane Departure Detection**: Detects dangerous steering angles.
-- **Sudden Braking Events**: Differentiates between normal and emergency braking.
+## 📊 Machine Learning Model Enhancements
+Recent updates have improved event classification with:
+- **Class Balancing**: Uses SMOTE to handle imbalanced datasets.
+- **Feature Scaling**: Applies MinMaxScaler and StandardScaler for optimal model performance.
+- **Multiple Models**: Compares XGBoost, Random Forest, and LightGBM for best accuracy.
+- **Hyperparameter Tuning**: Uses GridSearchCV to find optimal parameters.
 
 ## 📈 Data Visualizations
 The system generates various insightful charts, including:
@@ -91,7 +99,7 @@ The system generates various insightful charts, including:
 ## 🛠️ Future Improvements
 - Enhance dashboard interactivity with filtering and real-time updates.
 - Expand dataset with more driving scenarios.
-- Integrate machine learning for predictive analytics.
+- Improve model accuracy with additional features and ensemble learning.
 
 ---
 ## 📩 Contact

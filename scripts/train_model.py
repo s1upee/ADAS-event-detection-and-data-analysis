@@ -4,16 +4,16 @@ import os
 import joblib
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
+from lightgbm import LGBMClassifier
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.metrics import accuracy_score, classification_report
-from imblearn.over_sampling import RandomOverSampler
 
-# Define paths
+# Load Processed Data
 data_dir = "data"
 train_file = os.path.join(data_dir, "train.csv")
 test_file = os.path.join(data_dir, "test.csv")
 model_file = os.path.join(data_dir, "adas_model.pkl")
 
-# Ensure train and test datasets exist
 if not os.path.exists(train_file) or not os.path.exists(test_file):
     raise FileNotFoundError("Error: Training or test data not found. Run data_processing.py first.")
 
@@ -42,49 +42,41 @@ class_mapping = {label: idx for idx, label in enumerate(y_train.unique())}
 y_train = y_train.map(class_mapping)
 y_test = y_test.map(class_mapping)
 
-# Apply Oversampling
-ros = RandomOverSampler(random_state=42)
-X_train, y_train = ros.fit_resample(X_train, y_train)
+# ✅ Hyperparameter Tuning for XGBoost
+xgb_params = {
+    "n_estimators": [100, 300, 500],
+    "learning_rate": [0.01, 0.1, 0.2],
+    "max_depth": [3, 5, 7],
+    "subsample": [0.8, 1.0],
+}
+xgb_model = XGBClassifier(random_state=42)
+xgb_search = RandomizedSearchCV(xgb_model, xgb_params, n_iter=10, cv=3, scoring="accuracy", verbose=1, random_state=42)
+xgb_search.fit(X_train, y_train)
+best_xgb = xgb_search.best_estimator_
 
-# Train Random Forest Model
-print("📌 Training Random Forest Classifier...")
-rf_model = RandomForestClassifier(
-    n_estimators=300,   # More trees
-    max_depth=10,       # Control overfitting
-    min_samples_split=5,
-    min_samples_leaf=2,
-    random_state=42)
-rf_model.fit(X_train, y_train)
+# ✅ Train LightGBM Model
+print("📌 Training LightGBM Classifier...")
+lgbm_model = LGBMClassifier(n_estimators=300, learning_rate=0.1, max_depth=5, random_state=42)
+lgbm_model.fit(X_train, y_train)
 
-# Train XGBoost Model
-print("📌 Training XGBoost Classifier...")
-xgb_model = XGBClassifier(
-    n_estimators=300,
-    learning_rate=0.05,  # Reduce learning rate
-    max_depth=8,
-    subsample=0.8,
-    colsample_bytree=0.8,
-    random_state=42)
-xgb_model.fit(X_train, y_train)
+# ✅ Evaluate Models
+xgb_preds = best_xgb.predict(X_test)
+lgbm_preds = lgbm_model.predict(X_test)
 
-# Evaluate Models
-rf_preds = rf_model.predict(X_test)
-xgb_preds = xgb_model.predict(X_test)
-
-rf_acc = accuracy_score(y_test, rf_preds)
 xgb_acc = accuracy_score(y_test, xgb_preds)
+lgbm_acc = accuracy_score(y_test, lgbm_preds)
 
-print(f"✅ Random Forest Accuracy: {rf_acc:.4f}")
 print(f"✅ XGBoost Accuracy: {xgb_acc:.4f}")
-
-print("\n📌 Random Forest Classification Report:")
-print(classification_report(y_test, rf_preds, target_names=class_mapping.keys()))
+print(f"✅ LightGBM Accuracy: {lgbm_acc:.4f}")
 
 print("\n📌 XGBoost Classification Report:")
 print(classification_report(y_test, xgb_preds, target_names=class_mapping.keys()))
 
-# Save Best Model
-best_model = rf_model if rf_acc > xgb_acc else xgb_model
+print("\n📌 LightGBM Classification Report:")
+print(classification_report(y_test, lgbm_preds, target_names=class_mapping.keys()))
+
+# ✅ Save Best Model
+best_model = best_xgb if xgb_acc > lgbm_acc else lgbm_model
 joblib.dump(best_model, model_file)
 
 print(f"✅ Best model saved as: {model_file}")
